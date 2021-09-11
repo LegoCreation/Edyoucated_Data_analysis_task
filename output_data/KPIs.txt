@@ -1,0 +1,15 @@
+Percent time deviations is: 47.02386944671738
+  language  percent_deviation
+0       de          45.052583
+1       en          48.046736
+
+          type  percent_deviation
+0  interactive          73.998579
+1         text          60.727752
+2        video          40.952962
+
+Percentage of users who have more than 
+70% of watch duration and completed 70% of their materials: 17.819148936170212
+No. of passsed users: 268
+Average required materials per skill: 2.3964536977798048
+No. of users who could be potentially cheating: 29
