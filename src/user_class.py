@@ -25,7 +25,7 @@ class User:
 
 
 def load_data():
-    data_location = "/media/NV/Edyoucated_Data_Science/data" #Edit location here
+    data_location = "" #Edit location here
     return (pd.read_csv(data_location + "/material_progress.csv"),
             pd.read_csv(data_location + "/material.csv"),
             pd.read_csv(data_location + "/user_skill.csv"))
