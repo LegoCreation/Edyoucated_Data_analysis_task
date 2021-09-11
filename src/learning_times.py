@@ -140,6 +140,7 @@ def cheating_list():
     _, _, user_skills = load_data()
     filtered_users = user_skills[user_skills['user_id'].isin(failed_users)]
     mean_mastery_df = filtered_users.groupby('user_id', as_index=False)['is_mastered'].mean()
+    #if the failed users have more than 70 percent of skill mastery
     cheat_users = mean_mastery_df['user_id'][mean_mastery_df['is_mastered'] >= 0.7].tolist() 
     return cheat_users
  
