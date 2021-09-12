@@ -50,8 +50,8 @@ def create_json():
         
 if __name__ == '__main__':
     data_location =     data_location = "../data" #Edit location here
-    _, _, user_data = load_data()
-    user_instance = User(user_data.iloc[0,0], user_skills)
+    _, _, df_user_data = load_data()
+    user_instance = User(df_user_data.iloc[0,0], df_user_data)
     user_instance.describe()
     create_json()
 else:
