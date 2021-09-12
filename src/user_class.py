@@ -24,8 +24,8 @@ class User:
         print('Skill level: ', self.mastery_level)
 
 
+global data_location
 def load_data():
-    data_location = "" #Edit location here
     return (pd.read_csv(data_location + "/material_progress.csv"),
             pd.read_csv(data_location + "/material.csv"),
             pd.read_csv(data_location + "/user_skill.csv"))
@@ -49,8 +49,9 @@ def create_json():
         print('user_list.json created!')
         
 if __name__ == '__main__':
-    _, _, user_skills = load_data()
-    user_instance = User(user_skills.iloc[0,0], user_skills)
+    data_location =     data_location = "../data" #Edit location here
+    _, _, user_data = load_data()
+    user_instance = User(user_data.iloc[0,0], user_skills)
     user_instance.describe()
     create_json()
 else:

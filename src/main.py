@@ -5,7 +5,8 @@ import numpy as np
 
 def main():
     #Please edit the data location in learning_times and user_classes
-    
+    lt.data_location = '../data'
+    us.data_location = '../data'
     save_image = True # set True to save images to file
     if save_image: print('Saving graphs...')
     print('Plotting graphs...')
@@ -17,10 +18,11 @@ def main():
     type_df['percent_deviation'] = type_df['percent_deviation']*100
     
     #plotting the percent deviation by language and type dataframes
-    language_df.plot.bar(x = 'language', y = 'percent_deviation', rot = 0)
-    if save_image: plt.savefig('../plots/Deviation_by_language.png', dpi = 100)
-    type_df.plot.bar(x = 'type', y = 'percent_deviation', rot = 0)
-    if save_image: plt.savefig('../plots/Deviation_by_type.png', dpi = 100)
+    #plotting the percent deviation by language and type dataframes
+    _, axes = plt.subplots(nrows=1,ncols=2,figsize=(15,7))
+    language_df.plot.bar(x = 'language', y = 'percent_deviation', ax = axes[0], rot = 0)
+    type_df.plot.bar(x = 'type', y = 'percent_deviation', ax = axes[1], rot = 0)
+    if save_image: plt.savefig('../plots/Deviation_by_type_and_languages.png', dpi = 100)
     
     #Watch_time analysis
     pass_list = []
