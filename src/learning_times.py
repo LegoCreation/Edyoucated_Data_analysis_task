@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+global data_location
 def load_data():
-    data_location = "" #Edit location here
     return (pd.read_csv(data_location + "/material_progress.csv"),
             pd.read_csv(data_location + "/material.csv"),
             pd.read_csv(data_location + "/user_skill.csv"))
@@ -92,7 +92,7 @@ def general_analysis(save_image = False):
         (df_material['duration_minutes']<=10)].nunique()
     long = df_material['material_id'][(df_material['duration_minutes']>10)].nunique()
     
-        #user_skills
+    #user_skills
     df_by_user_id = user_skills.groupby('user_id', as_index=False)['is_mastered'].sum()
     df_by_skill_id = user_skills.groupby('skill_id', as_index=False)['is_mastered'].sum()
     avg_skills_by_per_user = df_by_user_id['is_mastered'].mean()
@@ -100,32 +100,26 @@ def general_analysis(save_image = False):
     
     
     #prints
-    plt.figure(figsize=(8, 4))
-    by_type.plot.bar(x = 'Number_of_types', y = 'type_count', rot = 0)
-    if save_image: plt.savefig('../plots/Number_of_types.png', dpi = 100)
+    _, axes = plt.subplots(nrows=1,ncols=2,figsize=(15,7))
+    by_type.plot.bar(x = 'Number_of_types', y = 'type_count', ax=axes[0], subplots = True , rot = 0)
+    by_language.plot.bar(x = 'Number_of_languages', y = 'language_count', subplots = True, ax=axes[1], rot = 0)
+    if save_image: plt.savefig('../plots/Number_of_languages_and_types.png', dpi = 100)
     
-    plt.figure(figsize=(5, 5))
-    by_language.plot.bar(x = 'Number_of_languages', y = 'language_count', rot = 0)
-    if save_image: plt.savefig('../plots/Number_of_languages.png', dpi = 100)
+    _, axes = plt.subplots(nrows=1,ncols=2,figsize=(15,7))
+    axes[0].bar(['Average no. of materials \n consumed by per user',
+             'Average no. of skills \n mastered by per user'],
+            [avg_materials_per_user, avg_skills_by_per_user])
+    axes[1].bar(['Average no. of users \n consuming a material',
+             'Average no. of users \n mastering a skill'],
+            [avg_users_per_material, avg_users_per_skill])
+    if save_image: plt.savefig('../plots/User_skill_material_metric.png', dpi = 100)
     
     fig = plt.figure(figsize=(6, 4))
     ax = fig.add_axes([0.15,0.15,0.75,0.75])
     ax.bar(['Short', 'Medium', 'Long'], [short, medium, long], 0.8)
     ax.set_title('Material_duration')
-    plt.show()
     if save_image: fig.savefig('../plots/Material_duration.png', dpi = 100)
-    
-    plt.figure(figsize=(5, 5))
-    plt.bar(['Average no. of materials \n consumed by per user',
-             'Average no. of skills \n mastered by per user'],
-            [avg_materials_per_user, avg_skills_by_per_user])
-    if save_image: plt.savefig('../plots/Per_user_index.png', dpi = 100)
-    
-    plt.figure(figsize=(5, 5))
-    plt.bar(['Average no. of users \n consuming a material',
-             'Average no. of users \n mastering a skill'],
-            [avg_users_per_material, avg_users_per_skill])
-    if save_image: plt.savefig('../plots/Average_user_index.png', dpi = 100)
+        
     
     if (avg_skills_by_per_user != 0):
         return avg_materials_per_user/avg_skills_by_per_user
@@ -140,7 +134,6 @@ def cheating_list():
     _, _, user_skills = load_data()
     filtered_users = user_skills[user_skills['user_id'].isin(failed_users)]
     mean_mastery_df = filtered_users.groupby('user_id', as_index=False)['is_mastered'].mean()
-    #if the failed users have more than 70 percent of skill mastery
     cheat_users = mean_mastery_df['user_id'][mean_mastery_df['is_mastered'] >= 0.7].tolist() 
     return cheat_users
  
@@ -172,6 +165,7 @@ def watchtime_finder(time_factor):
 '''
 
 if __name__ == '__main__':
+    data_location = "../data" #Edit location here
     print('Percent time deviations are:\n', percent_time_deviation())
     percent_passed, passed_users, _ = watch_analysis(0.7, 0.7, 5)
     print(
@@ -179,7 +173,7 @@ if __name__ == '__main__':
 70% of watch duration and completed 70% of their materials '''
         , percent_passed*100)
     print('No. of passsed users ', len(passed_users))
-    print('Average required materials per skill:', general_analysis())
+    print('Average required materials per skill:', general_analysis(True))
     print('No. of users who could be potentially cheating', len(cheating_list()))
 else:
     print('learning_times.py loaded')
